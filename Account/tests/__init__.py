@@ -60,6 +60,16 @@ class LoginUserTest(APITestCase):
         }, format="json")
         self.assertEqual(res.status_code, 201)
 
+    def test_user_change_password_2(self):
+        user_data, user_2 = create_unique_test_user(2)
+        url = reverse("change-password")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {get_token(user_2)}")
+        res = self.client.post(url, {
+            "old_password": DEF_TEST_PASSWORD,
+            "new_password": "NEW_TEST_PASSWORD@12"
+        }, format="json")
+        self.assertEqual(res.status_code, 201)
+
     def test_user_update(self):
         user_data, user = create_unique_test_user(1)
         url = reverse("user-update")
