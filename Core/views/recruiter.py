@@ -12,6 +12,7 @@ from Core.views.permissions import RecruiterOnlyPermission
 
 from django.db.models import Sum
 
+
 # Recruiter Create Api
 class RecruiterCreateApi(UserNestedCreateApi):
     model = Recruiter
@@ -63,7 +64,6 @@ class RefCodeApi(APIView):
 
 
 class RecruiterInfographicApi(APIView):
-
     permission_classes = [IsAuthenticated, RecruiterOnlyPermission]
     authentication_classes = [TokenAuthentication]
 

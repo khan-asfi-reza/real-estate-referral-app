@@ -2,13 +2,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
-from Core.models import Referred, Recruiter, Referral
-from Core.serializers.referred import ReferredSerializer
+from Core.models import Recruit, Recruiter, Referral
+from Core.serializers.recruit import RecruitSerializer
 from Core.views import UserNestedCreateApi, get_token
 
 
-# Referred Create View
-class ReferredUserCreateListApi(UserNestedCreateApi, ListAPIView):
+# recruit Create View
+class RecruitUserCreateListApi(UserNestedCreateApi, ListAPIView):
     """
     URL: licensee/
     Method: Post, Get(List)
@@ -30,13 +30,13 @@ class ReferredUserCreateListApi(UserNestedCreateApi, ListAPIView):
         Returns Saved Data
 
     List Method:
-        Returns List of Referred
+        Returns List of recruit
 
     """
-    model = Referred
-    serializer_class = ReferredSerializer
+    model = Recruit
+    serializer_class = RecruitSerializer
     ref_code_kwargs = "ref_code"
-    queryset = Referred.objects.get_queryset()
+    queryset = Recruit.objects.get_queryset()
     role = 2
 
     def get_recruiter(self, request):
@@ -51,23 +51,23 @@ class ReferredUserCreateListApi(UserNestedCreateApi, ListAPIView):
     def create(self, request, *args, **kwargs):
         # Get User
         user, user_error = self.create_user(request, *args, **kwargs)
-        # Get Referred Model Data
+        # Get recruit Model Data
         obj, error = self.create_model_data(request, *args, **kwargs)
         # Referrer
         recruiter, ref_error = self.get_recruiter(request)
 
         if user and obj and recruiter:
-            # Save Referred User
+            # Save recruit User
             obj.save(user=user)
             # Create referral object
-            Referral.objects.create(referred=user, recruiter=recruiter)
+            Referral.objects.create(recruit=user, recruiter=recruiter)
             # Token
             token = get_token(user)
             return Response({
                 "token": token.key,
                 "data": obj.data,
             },
-            status=status.HTTP_201_CREATED)
+                status=status.HTTP_201_CREATED)
 
         return self.send_bad_request(user_error,
                                      ref_error, error,
@@ -75,8 +75,8 @@ class ReferredUserCreateListApi(UserNestedCreateApi, ListAPIView):
                                      {"error": ["Invalid Referrer"]})
 
 
-# Referred Retrieve Update Destroy View
-class ReferredUserCRUDApi(ModelViewSet):
+# recruit Retrieve Update Destroy View
+class RecruitUserCRUDApi(ModelViewSet):
     """
         URL: licensee/pk:int
         Method: Put, Get(Retrieve), Delete
@@ -91,14 +91,14 @@ class ReferredUserCRUDApi(ModelViewSet):
             Returns Saved Data
 
         Retrieve Method:
-            Returns Referred Data
+            Returns recruit Data
 
         Delete Method:
-            Deletes Referred Account and data
+            Deletes recruit Account and data
 
         """
-    model = Referred
-    serializer_class = ReferredSerializer
+    model = Recruit
+    serializer_class = RecruitSerializer
     lookup_url_kwarg = "pk"
     lookup_field = "id"
-    queryset = Referred.objects.get_queryset()
+    queryset = Recruit.objects.get_queryset()

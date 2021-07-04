@@ -6,9 +6,9 @@ User = get_user_model()
 
 
 # Referred Model
-class Referred(models.Model):
+class Recruit(models.Model):
     # Referred User
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="referred")
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="recruit")
     # Department of real estate License
     dre_license = models.CharField(max_length=100, null=True, blank=True)
     # NMLS License Number

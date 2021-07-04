@@ -97,10 +97,10 @@ class RecruiterTest(APITestCase):
         # Unique Recruiter
         user_data, recruiter = create_unique_test_recruiter()
         # URL
-        referred_create_url = reverse("referred-create-list")
+        recruit_create_url = reverse("recruit-create-list")
         # Create Test users
         for i, user in enumerate(unique_users):
-            self.client.post(referred_create_url, {
+            self.client.post(recruit_create_url, {
                 "user": user,
                 "dre_license": f"TEST_LICENSE_{i}",
                 "nmls_number": f"TEST_NMLS_{i}",

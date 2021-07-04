@@ -14,14 +14,14 @@ class ReferralTest(APITestCase):
         # Request User
         req_user_data, req_user = create_unique_test_user(1)
 
-        # Referred User
+        # recruit User
         ref_user_1_data, ref_user_1 = create_unique_test_user(2)
         ref_user_2_data, ref_user_2 = create_unique_test_user(2)
 
         # Bulk Create
         Referral.objects.bulk_create([
-            Referral(recruiter=req_user, referred=ref_user_1),
-            Referral(recruiter=req_user, referred=ref_user_2),
+            Referral(recruiter=req_user, recruit=ref_user_1),
+            Referral(recruiter=req_user, recruit=ref_user_2),
         ])
 
         # Test
