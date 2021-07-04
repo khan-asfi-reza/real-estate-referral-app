@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.urls import reverse
@@ -80,3 +81,14 @@ class LoginUserTest(APITestCase):
         }, format="json")
 
         self.assertEqual(200, res.status_code)
+
+    def test_email_exist(self):
+        user_data, user = create_unique_test_user(1)
+        url = reverse("email-check")
+        res = self.client.post(url, {"email": "userTest1234@testemail.com"}, format="json")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data["msg"], 1)
+
+        res = self.client.post(url, {"email": user_data["email"]}, format='json')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data["msg"], 0)

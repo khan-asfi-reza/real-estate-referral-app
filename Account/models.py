@@ -34,7 +34,7 @@ class User(AbstractUser):
     # User Phone Number
     phone_number = models.CharField(null=True, blank=True, max_length=20)
     # User Role
-    role = models.PositiveSmallIntegerField(choices=[(1, "Recruiter"), (2, "Referred"), (3, "Admin")])
+    role = models.PositiveSmallIntegerField(choices=[(1, "Recruiter"), (2, "Recruit"), (3, "Admin")])
     # User Address
     address = models.TextField(blank=True, null=True)
     # City Name

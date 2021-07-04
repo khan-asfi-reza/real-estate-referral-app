@@ -5,8 +5,8 @@ from Core.models import Referral
 
 
 class ReferralSerializer(serializers.ModelSerializer):
-    referred = UserSerializerReferral(read_only=True)
+    recruit = UserSerializerReferral(read_only=True)
 
     class Meta:
         model = Referral
-        fields = ["id", "recruiter", "referred", "commission", "time_stamp"]
+        fields = ["id", "recruiter", "recruit", "commission", "time_stamp"]
