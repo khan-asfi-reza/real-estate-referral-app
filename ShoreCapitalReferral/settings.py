@@ -12,10 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from pathlib import Path
-<<<<<<< HEAD
-=======
 from .env import *
->>>>>>> dfcef3f62d630f9763aaf3ee61bd2594aec3e5db
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,11 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = IS_PROD == 0
 
-<<<<<<< HEAD
 ALLOWED_HOSTS = ["*"]
 
-=======
->>>>>>> dfcef3f62d630f9763aaf3ee61bd2594aec3e5db
 # Application definition
 
 INSTALLED_APPS = [
@@ -151,7 +145,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = f"/media/"
 
-<<<<<<< HEAD
+
 CORS_ALLOWED_ORIGINS = [
     WHITELIST_URL
 ]
@@ -159,18 +153,5 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ORIGIN_WHITELIST = (
     WHITELIST_URL
 )
-=======
+
 CORS_ORIGIN_ALLOW_ALL = True
-
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000"
-# ]
-
-# CORS_ORIGIN_WHITELIST = (
-#     "http://localhost:8000",
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000"
-# )
->>>>>>> dfcef3f62d630f9763aaf3ee61bd2594aec3e5db
