@@ -9,8 +9,6 @@ class Referral(models.Model):
     recruiter = models.ForeignKey(to=User, related_name="recruiter_user", null=True, on_delete=models.SET_NULL)
     # The user who is being referred
     recruit = models.OneToOneField(to=User, related_name="recruit_user", null=True, on_delete=models.SET_NULL)
-    # Commission Amount
-    commission = models.FloatField(default=0.0)
     # Time of Creation
     time_stamp = models.DateTimeField(auto_now_add=True)
     # Time of update

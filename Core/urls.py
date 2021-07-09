@@ -3,6 +3,7 @@ from django.urls import path
 from Core.views.referral import ReferralListApi
 from Core.views.recruit import RecruitUserCreateListApi, RecruitUserCRUDApi
 from Core.views.recruiter import RecruiterCreateApi, RecruiterCRUDApi, RefCodeApi, RecruiterInfographicApi
+from Core.views.transaction import CommissionListApi
 
 view_perms = {
     "put": "partial_update",
@@ -17,7 +18,8 @@ urlpatterns = [
     path("recruit/", RecruitUserCreateListApi.as_view(), name="recruit-create-list"),
     path("recruit/<int:pk>", RecruitUserCRUDApi.as_view(view_perms), name="recruit-crud"),
     path("referral/", ReferralListApi.as_view(), name="referral-list"),
-    path("recruiter/info", RecruiterInfographicApi.as_view(), name="recruiter-info")
+    path("recruiter/info", RecruiterInfographicApi.as_view(), name="recruiter-info"),
+    path("recruiter/commission", CommissionListApi.as_view(), name="commission-list")
 ]
 
 admin.site.site_header = "Shore Capital Agent Referral"

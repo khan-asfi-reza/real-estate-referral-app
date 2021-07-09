@@ -63,6 +63,8 @@ those Recruits will complete a transaction and based on that transaction, the re
 2. `Amount`: Float
 
 
+Transaction Creation Adds A New Commission 
+
 ## API Docs
 
 #### 1. Login
