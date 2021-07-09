@@ -14,4 +14,5 @@ class ReferralListApi(ListAPIView):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
+
         return Referral.objects.filter(recruiter=self.request.user).order_by("id")

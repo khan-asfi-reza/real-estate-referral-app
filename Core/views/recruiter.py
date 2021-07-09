@@ -12,6 +12,7 @@ from Core.views.permissions import RecruiterOnlyPermission
 
 from django.db.models import Sum
 
+
 # Recruiter Create Api
 class RecruiterCreateApi(UserNestedCreateApi):
     model = Recruiter
@@ -57,13 +58,12 @@ class RefCodeApi(APIView):
                     "full_name": recruiter.full_name
                 })
 
-            return Response({"error": ["Faulty Recruiter"]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": ["Invalid Recruiter"]}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"error": ["Invalid Ref Code"]}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RecruiterInfographicApi(APIView):
-
     permission_classes = [IsAuthenticated, RecruiterOnlyPermission]
     authentication_classes = [TokenAuthentication]
 

@@ -72,11 +72,16 @@ class UserSerializer(serializers.ModelSerializer):
     # User Model Serializer
     class Meta:
         model = User
-        fields = ["id", "email", "password", "phone_number","first_name", "last_name", "city", "state", "zip", "address", "role"]
+        fields = ["id", "email", "password", "phone_number", "first_name", "last_name", "city", "state", "zip",
+                  "address", "role"]
         extra_kwargs = {
             "password": {"write_only": True}
         }
         read_only_fields = ("id", "date_joined", "last_login", "role")
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
 
 
 # User serializer for referral views
