@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'rest_framework',
     'rest_framework.authtoken',
+    'localflavor',
     'corsheaders',
     'django.contrib.staticfiles',
     'Account',
@@ -155,3 +156,4 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
+

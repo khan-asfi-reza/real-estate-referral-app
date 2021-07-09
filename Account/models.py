@@ -4,6 +4,8 @@ from django.db.models import Q
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USStateField
 
+from Account.utils import get_expiration_time
+
 
 class UserManager(BaseUserManager):
 
@@ -76,3 +78,23 @@ class AdminUser(User):
         proxy = True
         verbose_name = "Admin User"
         verbose_name_plural = "Admin Users"
+
+
+# Forget Email
+class ForgetPassword(models.Model):
+    REQUEST_SENT_THRESHOLD = 6
+    # User
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    # Unique Link
+    unique_link = models.CharField(max_length=30, blank=True, null=True)
+    # Creation Time
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    # Expiration Time
+    expiration_time = models.DateTimeField(default=get_expiration_time)
+    # Changed
+    changed = models.BooleanField(default=False)
+    # Request Sent
+    request_sent = models.PositiveSmallIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.user.email}"

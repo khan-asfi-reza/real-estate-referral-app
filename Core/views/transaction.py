@@ -3,6 +3,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from Core.models.transaction import Commission
 from Core.serializers.referral import ReferralSerializer
+from Core.serializers.transaction import CommissionListSerializer
 from Core.views.permissions import RecruiterOnlyPermission
 from ShoreCapitalReferral.pagination import DefaultPaginationClass
 
@@ -32,7 +33,7 @@ class CommissionListApi(ListAPIView):
     # Permission Class
     permission_classes = [IsAuthenticated, RecruiterOnlyPermission]
     pagination_class = DefaultPaginationClass
-    serializer_class = ReferralSerializer
+    serializer_class = CommissionListSerializer
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
