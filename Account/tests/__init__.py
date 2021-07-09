@@ -92,3 +92,18 @@ class LoginUserTest(APITestCase):
         res = self.client.post(url, {"email": user_data["email"]}, format='json')
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data["msg"], 0)
+
+    def test_forget_password(self):
+        data, user = create_unique_test_user(1)
+
+        url = reverse("forget-password")
+        # Post Request 4 times
+        for i in range(5):
+            res = self.client.post(url, {"email": user.email}, format="json")
+            self.assertEqual(res.status_code, 201)
+            self.assertEqual(res.data["msg"], 1)
+
+        # Error
+        res = self.client.post(url, {"email": user.email}, format="json")
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.data["msg"], 0)

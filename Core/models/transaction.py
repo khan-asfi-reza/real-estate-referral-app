@@ -12,7 +12,7 @@ User = get_user_model()
 # Transaction
 class Transaction(models.Model):
     # Recruit Who Completed Transaction
-    recruit = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    recruit = models.ForeignKey(to=User, on_delete=models.CASCADE, limit_choices_to={'role': 2})
     # Amount Completed
     amount = models.FloatField()
     # Time when completed
@@ -25,9 +25,15 @@ class Transaction(models.Model):
 # Commission
 class Commission(models.Model):
     # Recruiter Who Recruited The Recruit
-    recruiter = models.ForeignKey(to=User, related_name="referral_recruiter", on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(to=User,
+                                  related_name="referral_recruiter",
+                                  on_delete=models.CASCADE,
+                                  limit_choices_to={'role': 1})
     # Recruit
-    recruit = models.ForeignKey(to=User, related_name="commission_recruit", on_delete=models.CASCADE)
+    recruit = models.ForeignKey(to=User,
+                                related_name="commission_recruit",
+                                on_delete=models.CASCADE,
+                                limit_choices_to={'role': 2})
     # Commission Amount
     commission = models.FloatField(default=0.0)
     # Transaction ID

@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.views import Token
+from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from Account.serializers import AuthenticationSerializer, UserSerializer, PasswordChangeSerializer
+from Account.serializers import AuthenticationSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -41,31 +41,6 @@ class AuthApi(GenericAPIView):
                 "token": token.key
             })
         return Response({"error": ["Unauthorized User"]}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-class ChangePasswordApi(GenericAPIView):
-    # Change Password
-    serializer_class = PasswordChangeSerializer
-    # Authentication Class
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    # Post Request to change password
-    def post(self, request, *args, **kwargs):
-        # Get serialized data
-        serialized_data = self.get_serializer(data=request.data)
-        # Save user password
-        if serialized_data.is_valid():
-            user = serialized_data.save()
-            # Create new token
-            token = Token.objects.filter(user=user)
-            if token.exists():
-                token.first().delete()
-            new_token = Token.objects.create(user=user)
-            return Response({
-                "token": new_token.key
-            }, status=status.HTTP_201_CREATED)
-        return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountUpdateApi(GenericAPIView):

@@ -23,3 +23,10 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', "")
 # PROD
 IS_PROD = int(os.environ.get('IS_PROD', "0"))
 WHITELIST_URL = os.environ.get('WHITELIST_URL', "http://localhost:9000")
+FEND_FP_URL = os.environ.get("FEND_FP_URL", "reset-password")
+# Email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')

@@ -71,12 +71,11 @@ class RecruiterInfographicApi(APIView):
     def get(self, request, *args, **kwargs):
         # Get Recruiter infographic
         ref_data = Referral.objects.filter(recruiter=self.request.user)
+        # Total Recruited
+        recruited = ref_data.count()
         # Total Bonus
         commission = Commission.objects.filter(recruiter=self.request.user)
         bonus = commission.aggregate(Sum("commission"))["commission__sum"]
-        # Total Recruited
-        recruited = ref_data.count()
-
         bonus = 0 if bonus is None else bonus
 
         return Response({
