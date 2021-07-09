@@ -2,7 +2,7 @@ import logging
 from django.test import TestCase
 from Account.tests import create_unique_test_user
 from Core.models import Referral, Transaction
-from Core.models.const import TRANSACTION_PROFIT_RATE
+from Core.const import TRANSACTION_PROFIT_RATE
 from Core.tests.utils import create_unique_test_recruiter
 
 

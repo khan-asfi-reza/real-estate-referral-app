@@ -1,4 +1,6 @@
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
@@ -8,6 +10,9 @@ from Core.views import UserNestedCreateApi, get_token
 
 
 # recruit Create View
+from Core.views.permissions import RecruitOnlyPermission
+
+
 class RecruitUserCreateListApi(UserNestedCreateApi, ListAPIView):
     """
     URL: licensee/
@@ -78,14 +83,14 @@ class RecruitUserCreateListApi(UserNestedCreateApi, ListAPIView):
 # recruit Retrieve Update Destroy View
 class RecruitUserCRUDApi(ModelViewSet):
     """
-        URL: licensee/pk:int
+        URL: recruit/pk:int
         Method: Put, Get(Retrieve), Delete
         Put Method:
             data: {
                 phone_number: str,
                 nmls_number: str,
                 dre_license: str,
-                ref_code: str
+
             }
 
             Returns Saved Data
@@ -95,8 +100,9 @@ class RecruitUserCRUDApi(ModelViewSet):
 
         Delete Method:
             Deletes recruit Account and data
-
         """
+    permission_classes = [IsAuthenticated, RecruitOnlyPermission]
+    authentication_classes = [TokenAuthentication]
     model = Recruit
     serializer_class = RecruitSerializer
     lookup_url_kwarg = "pk"

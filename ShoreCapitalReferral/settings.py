@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent.parent
+from .env import *
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -22,13 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # Environment Variables
 
-from .env import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -43,7 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.staticfiles',
     'Account',
-    'Core',]
+    'Core', ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -92,7 +90,6 @@ DATABASES = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -115,6 +112,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
     ]
 }
 
@@ -123,7 +123,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
@@ -145,6 +145,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = f"/media/"
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:8000",
 #     "http://localhost:3000",
@@ -156,6 +158,3 @@ MEDIA_URL = f"/media/"
 #     "http://localhost:3000",
 #     "http://127.0.0.1:3000"
 # )
-
-CORS_ORIGIN_ALLOW_ALL = True
-

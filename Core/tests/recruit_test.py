@@ -1,6 +1,7 @@
 import json
 
 from django.urls import reverse, resolve
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from Core.models import Recruit, Referral
 from django.contrib.auth import get_user_model
@@ -99,6 +100,8 @@ class RecruitTest(APITestCase):
         # Partial Update
         recruit = self.create_test_recruit()
         # Get Test
+        token, created = Token.objects.get_or_create(user=recruit.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
         res = self.client.get(reverse("recruit-crud", kwargs={"pk": recruit.id}))
         self.assertEqual(res.status_code, 200)
         # Update Test

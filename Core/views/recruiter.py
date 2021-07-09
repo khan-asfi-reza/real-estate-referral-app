@@ -58,7 +58,7 @@ class RefCodeApi(APIView):
                     "full_name": recruiter.full_name
                 })
 
-            return Response({"error": ["Faulty Recruiter"]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": ["Invalid Recruiter"]}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"error": ["Invalid Ref Code"]}, status=status.HTTP_400_BAD_REQUEST)
 
