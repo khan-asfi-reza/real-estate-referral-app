@@ -24,6 +24,7 @@ those Recruits will complete a transaction and based on that transaction, the re
 3. Recruit
 4. Referral
 5. Transaction
+6. Commission
 
 ### User
 `User` model contains Account information, 
@@ -43,6 +44,7 @@ those Recruits will complete a transaction and based on that transaction, the re
 `Recruiter` model contains recruiter information and referral code
 1. `user`: User Model Instance
 2. `ref_code`: Int
+3. `time_stamp` Date Time
 
 ### Recruit
 `Recruit` model contains Recruit Information
@@ -55,13 +57,23 @@ those Recruits will complete a transaction and based on that transaction, the re
 `Referral` Contains Relationship between Recruit and Recruiter
 1. `Recruiter`: User Model Instance
 2. `Recruit`: User Model Instance
-3. `Commission`: Float
 
 ### Transaction
 `Transaction` can be done by a recruit
 1. `Recruit`: User Model Instance
 2. `Amount`: Float
+3. `time_stamp` Date Time
 
+### Commission
+
+1. `Recruit`: User Model Instance
+2. `Recruiter`: User Model Instance
+3. `commission`: Float
+4. `time_stamp`: Date Time
+5. `Transaction`: Transaction ID
+
+
+Transaction Creation Adds A New Commission 
 
 ## API Docs
 
@@ -269,7 +281,6 @@ Response Body
          first_name: "First Name",
          last_name: "Last Name"
        },
-       commission: 200,
        time_stamp: "2020-02-02 12:19:34.45666"
     }
   ]
@@ -308,5 +319,39 @@ Response Body
 ```json5
 {
   ref_code: "<UNIQUE REF CODE>"
+}
+```
+
+
+#### 10. Commission Data
+
+`api/core/recruite/commission`
+
+METHOD: `GET`
+
+Headers : `{Authorization: "Token <YOUR TOKEN>"}`
+
+Query Params: `?page=<page_number>`
+
+Response Body
+```json5
+{
+  page: 1,
+  next: "Link",
+  prev: "Link",
+  results: [
+    {
+       id: 1,
+       recruiter: 1,
+       recruit: {
+         email: "Email",
+         first_name: "First Name",
+         last_name: "Last Name"
+       },
+       time_stamp: "2020-02-02 12:19:34.45666",
+       commission: 100,
+       transaction: 1,
+    }
+  ]
 }
 ```

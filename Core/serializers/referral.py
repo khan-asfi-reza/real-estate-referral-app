@@ -9,6 +9,6 @@ class ReferralSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Referral
-        fields = ["id", "recruiter", "recruit", "commission", "time_stamp"]
+        fields = ["id", "recruiter", "recruit", "time_stamp"]
 
 

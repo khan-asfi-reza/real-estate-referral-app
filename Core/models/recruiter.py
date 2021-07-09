@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 User = get_user_model()
 
 
-class ReferrerModelManager(models.Manager):
+class RecruiterModelManager(models.Manager):
 
     def get_recruiter(self, ref_code):
         try:
@@ -31,7 +31,7 @@ class Recruiter(models.Model):
     def username(self):
         return self.user.email
 
-    objects = ReferrerModelManager()
+    objects = RecruiterModelManager()
 
 
 @receiver(post_save, sender=Recruiter, dispatch_uid="Recruiter_REF_CODE_CREATE")

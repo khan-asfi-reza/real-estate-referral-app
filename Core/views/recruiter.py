@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Core.models import Recruiter, Referral
+from Core.models.transaction import Commission
 from Core.serializers.recruiter import RecruiterSerializer, RecruiterRefCodeSerializer
 from Core.views import UserNestedCreateApi
 from Core.views.permissions import RecruiterOnlyPermission
@@ -71,7 +72,8 @@ class RecruiterInfographicApi(APIView):
         # Get Recruiter infographic
         ref_data = Referral.objects.filter(recruiter=self.request.user)
         # Total Bonus
-        bonus = ref_data.aggregate(Sum("commission"))["commission__sum"]
+        commission = Commission.objects.filter(recruiter=self.request.user)
+        bonus = commission.aggregate(Sum("commission"))["commission__sum"]
         # Total Recruited
         recruited = ref_data.count()
 

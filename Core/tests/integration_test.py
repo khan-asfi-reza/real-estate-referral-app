@@ -4,7 +4,8 @@ import logging
 
 from Account.tests.test_utils import get_unique_user_data
 from Core.models import Transaction
-from Core.const import TRANSACTION_PROFIT_RATE
+from Core.const import TRANSACTION_PROFIT_RATE, TRANSACTION_PROFIT
+from Core.models.transaction import Commission
 
 
 class IntegrationTest(APITestCase):
@@ -80,9 +81,14 @@ class IntegrationTest(APITestCase):
         # Part 7 - Transaction & Profit Check
         AMOUNT = 5000
         Transaction.objects.create(recruit_id=recruit_id, amount=AMOUNT)
-        estimated_bonus = TRANSACTION_PROFIT_RATE * AMOUNT
+        estimated_bonus = TRANSACTION_PROFIT
         res = self.client.get(recruiter_info_url)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data["total_recruited"], 1)
         self.assertEqual(res.data["bonus"], estimated_bonus)
         print("7. Transaction & Profit Check - ✔")
+
+        # Part 8 - Transaction Commission Check
+        com = Commission.objects.get(recruit_id=recruit_id)
+        self.assertEqual(com.commission, estimated_bonus)
+        print("7. Commission & Profit Check - ✔")

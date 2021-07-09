@@ -8,7 +8,7 @@ admin.site.register(Recruit)
 
 
 class ReferralAdmin(ModelAdmin):
-    list_display = ["recruiter", "recruit", "commission", "time_stamp"]
+    list_display = ["recruiter", "recruit", "time_stamp"]
 
 
 admin.site.register(Referral, ReferralAdmin)

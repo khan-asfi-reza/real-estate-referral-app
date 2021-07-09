@@ -25,7 +25,7 @@ def get_user_data(role: int = 1):
 def get_unique_user_data(role=1):
     return {
         "phone_number": "+12312312366",
-        "email": f"EMAIL{random.randrange(1000)}@email.com",
+        "email": f"EMAIL{random.randrange(1000000)+random.randrange(999)}@email.com",
         "password": DEF_TEST_PASSWORD,
         "role": role,
         "address": "TEST ADDRESS",
