@@ -1,4 +1,4 @@
-name: DjangoCI
+name: Development
 
 on:
   push:
