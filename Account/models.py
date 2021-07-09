@@ -1,11 +1,13 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.db.models import Q
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USStateField
 
 
 class UserManager(BaseUserManager):
 
+    # Create User Method
     def __create_user(self, email, password, role, *args, **kwargs):
         if not email:
             raise ValueError('Users must have an email address')
@@ -19,14 +21,26 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    # Create Normal User
     def create_user(self, email, password, role, *args, **kwargs):
         return self.__create_user(email, password, role, *args, **kwargs)
 
+    # Create Admin Users
     def create_superuser(self, email, password, role, *args, **kwargs):
         return self.__create_user(email, password, role, *args, **kwargs,
                                   is_staff=True,
                                   is_active=True,
                                   is_superuser=True, )
+
+    def create_staff(self, email, password, role, *args, **kwargs):
+        return self.__create_user(email, password, role, *args, **kwargs,
+                                  is_staff=True,
+                                  is_active=True,
+                                  is_superuser=False, )
+
+    # Returns Admin Staff Users
+    def get_admin_staff_users(self):
+        return self.filter(Q(is_staff=True) | Q(is_superuser=True))
 
 
 class User(AbstractUser):
@@ -55,3 +69,10 @@ class User(AbstractUser):
     @property
     def full_name(self):
         return self.first_name + " " + self.last_name
+
+
+class AdminUser(User):
+    class Meta:
+        proxy = True
+        verbose_name = "Admin User"
+        verbose_name_plural = "Admin Users"

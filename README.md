@@ -148,10 +148,10 @@ Request Body:
 
 Response: `{msg: 0 / 1}`
 
-```python
-# 0 > Email Is not Available
-# 1 > Email is available
-```
+
+###### 0 > Email Is not Available
+###### 1 > Email is available
+
 
 #### 5. Get Ref Code
 
@@ -249,6 +249,8 @@ Response
 
 METHOD: `GET`
 
+Headers : `{Authorization: "Token <YOUR TOKEN>"}`
+
 Query Params: `?page=<page_number>`
 
 Response Body
@@ -271,5 +273,39 @@ Response Body
     }
   ]
 }
+```
 
+
+#### 8. Recruiter Info
+
+`api/core/recruiter/info`
+
+METHOD: `GET`
+
+Headers : `{Authorization: "Token <YOUR TOKEN>"}`
+
+Response Body
+```json5
+{
+  bonus: 100,
+  total_recruited: 5,
+}
+```
+
+
+#### 9. Recruiter Ref Code
+
+
+`api/core/recruiter`
+
+METHOD: `GET`
+
+Headers : `{Authorization: "Token <YOUR TOKEN>"}`
+
+Response Body
+
+```json5
+{
+  ref_code: "<UNIQUE REF CODE>"
+}
 ```

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .const import TRANSACTION_PROFIT_BASE_AMOUNT, TRANSACTION_PROFIT_RATE
+from Core.const import TRANSACTION_PROFIT_BASE_AMOUNT, TRANSACTION_PROFIT_RATE
 
 User = get_user_model()
 
