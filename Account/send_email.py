@@ -20,10 +20,14 @@ class EmailThread(threading.Thread):
 
 
 class SendEmail:
+
+
     @staticmethod
     def send_email(**kwargs):
         email = EmailMessage(
             subject=kwargs['subject'],
             body=kwargs['body'],
             to=[kwargs['to']])
+
         EmailThread(email).start()
+
