@@ -83,6 +83,7 @@ class ForgetPasswordApi(APIView):
                         to=fp_obj.user.email,
                         body=get_forget_password_message(fp_obj.unique_link)
                     )
+                    # User Email as Secret
                     email = fp_obj.user.email
                     secret_email = email[0:4] + "*" * (len(email.split('@')[0]) - 3) + f"@{email.split('@')[1]}"
 
