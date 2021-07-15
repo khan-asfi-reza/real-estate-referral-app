@@ -32,7 +32,8 @@ class Commission(models.Model):
     # Recruit
     recruit = models.ForeignKey(to=User,
                                 related_name="commission_recruit",
-                                on_delete=models.CASCADE,
+                                on_delete=models.SET_NULL,
+                                null=True,
                                 limit_choices_to={'role': 2})
     # Commission Amount
     commission = models.FloatField(default=0.0)

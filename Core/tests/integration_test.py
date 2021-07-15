@@ -2,6 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 import logging
 
+from Account.models import ForgetPassword
 from Account.tests.test_utils import get_unique_user_data
 from Core.models import Transaction
 from Core.const import TRANSACTION_PROFIT_RATE, TRANSACTION_PROFIT
@@ -9,6 +10,7 @@ from Core.models.transaction import Commission
 
 
 class IntegrationTest(APITestCase):
+    logger = logging.getLogger(__name__)
 
     def login(self, credentials):
         login_url = reverse("login")
@@ -18,9 +20,9 @@ class IntegrationTest(APITestCase):
         return res.data["token"]
 
     def test_integration(self):
+
         print("\nIntegration Testing")
         print("----------------------------------------------------------------------")
-
         # Recruiter and Recruit Data
         recruiter_data = get_unique_user_data()
         recruit_data = get_unique_user_data(2)
@@ -59,6 +61,7 @@ class IntegrationTest(APITestCase):
                                )
         self.assertEqual(res.status_code, 201)
         recruit_id = res.data["data"]["user"]["id"]
+
         print(f"4. Recruit Register -  ✔")
 
         # Part 5 - Get Info
@@ -91,4 +94,25 @@ class IntegrationTest(APITestCase):
         # Part 8 - Transaction Commission Check
         com = Commission.objects.get(recruit_id=recruit_id)
         self.assertEqual(com.commission, estimated_bonus)
-        print("7. Commission & Profit Check - ✔")
+        print("8. Commission & Profit Check - ✔")
+
+        # Part 9 - Forget Password
+        fp_api = reverse("forget-password")
+        res = self.client.post(fp_api, {"email": recruiter_data["email"]}, format="json")
+        self.assertEqual(res.status_code, 201)
+        print("9. Password Change Request Check - ✔")
+
+        # part 10 - Validate Password Unique Link
+        reset_link = ForgetPassword.objects.get(user__email=recruiter_data["email"])
+        validation_api = reverse("validate-reset-link")
+        res = self.client.post(validation_api, {"unique_link": reset_link.unique_link}, format="json")
+        self.assertEqual(res.status_code, 200)
+        print("10. Password Reset Link Check - ✔")
+
+        # Part 11 - Reset Password
+        reset_api = reverse("reset-password")
+        res = self.client.post(reset_api, {"email": recruiter_data["email"],
+                                           "unique_link": reset_link.unique_link,
+                                           "password": "NEW_PASSWORD_TEST_2020"})
+        self.assertEqual(res.status_code, 201)
+        print("11. Password Reset Check - ✔")

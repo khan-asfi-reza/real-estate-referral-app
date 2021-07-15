@@ -20,7 +20,7 @@ class RecruiterModelManager(models.Manager):
 # Referrer Model
 class Recruiter(models.Model):
     # Referrer User
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, limit_choices_to={"role": 1})
     # Unique Ref code
     ref_code = models.CharField(max_length=24, unique=True, null=True, blank=True)
 
