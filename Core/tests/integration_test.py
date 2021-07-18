@@ -22,15 +22,11 @@ class IntegrationTest(APITestCase):
 
     def test_integration(self):
         sys.stdout.write("\nIntegration Testing")
-        sys.stdout.write("-"*10,)
+        sys.stdout.write("-" * 10, )
         sys.stdout.write("\n")
         # Recruiter and Recruit Data
         recruiter_data = get_unique_user_data()
         recruit_data = get_unique_user_data(2)
-
-        # Set Recruiter Email
-        if TEST_EMAIL:
-            recruiter_data["email"] = TEST_EMAIL
 
         # Part 1 - Create Recruit Data
         recruiter_create_url = reverse("recruiter-create")
