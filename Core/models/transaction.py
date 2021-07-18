@@ -1,10 +1,6 @@
-import logging
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-from Core.const import TRANSACTION_PROFIT_BASE_AMOUNT, TRANSACTION_PROFIT
 
 User = get_user_model()
 
@@ -19,7 +15,7 @@ class Transaction(models.Model):
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.recruit.email
+        return f"{self.id}"
 
 
 # Commission
@@ -39,32 +35,44 @@ class Commission(models.Model):
     commission = models.FloatField(default=0.0)
     # Transaction ID
     transaction = models.OneToOneField(to=Transaction, on_delete=models.CASCADE)
-    # When Was Completed
+    # When Was Create
     time_stamp = models.DateTimeField(auto_now_add=True)
+    # Updated
+    updated = models.DateTimeField(auto_now=True)
     # Did The recruiter get the bonus
     completed = models.BooleanField(default=False)
+    # Paid Amount
+    paid_commission = models.FloatField(default=0.0, )
 
     def __str__(self):
-        return f"{self.id} - {self.time_stamp} - {self.recruiter.email}"
+        return f"{self.id} - {self.time_stamp} - {self.recruiter.id}"
 
 
-# Creates Commission After Transaction
-@receiver(post_save, sender=Transaction, dispatch_uid="Transaction Post Save Commission Creation")
-def recruiter_post_create(sender, instance, created, *args, **kwargs):
-    from .referral import Referral
-    if created:
-        if instance.amount >= TRANSACTION_PROFIT_BASE_AMOUNT:
-            try:
-                # Get Referral Relationship
-                ref = Referral.objects.get(recruit=instance.recruit)
-                # Check Valid Relationship
-                if ref.recruiter is not None:
-                    # Commission Model Create
-                    commission = Commission.objects.create(recruit=instance.recruit,
-                                                           transaction=instance,
-                                                           recruiter=ref.recruiter,
-                                                           )
-                    commission.commission = TRANSACTION_PROFIT
-                    commission.save()
-            except Referral.DoesNotExist:
-                logging.error("Invalid Referral and Recruit")
+# Paid Commission Amounts
+class CommissionPayment(models.Model):
+    # Transaction ID
+    transaction_id = models.PositiveBigIntegerField(blank=True)
+    # Commission
+    commission = models.ForeignKey(to=Commission, on_delete=models.CASCADE)
+    # Amount
+    amount = models.FloatField(default=0.0)
+    # When Was Create
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    # Updated
+    updated = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        # If Commission Payment Passes the commission amount threshold
+        if self.commission.paid_commission + self.amount > self.commission.commission:
+            raise ValidationError({
+                'paid': 'Amount exceeded',
+                'commission': 'Cannot save commission'
+            })
+
+        self.transaction_id = self.commission.transaction.id
+
+    def save(self, *args, **kwargs):
+        # If Transaction Id is invalid
+        if not self.transaction_id:
+            self.transaction_id = self.commission.transaction.id
+        super(CommissionPayment, self).save(*args, **kwargs)

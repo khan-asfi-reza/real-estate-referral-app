@@ -51,3 +51,24 @@ class SendEmail:
         # Send Email
         msg.attach_alternative(html_message, "text/html")
         EmailThread(msg).start()
+
+    @staticmethod
+    def send_custom_context_html_email(template, subject="", context=None, to="", **kwargs):
+        """
+                    param: template: Email Template
+                    param: subject: Email subject
+                    param: body: Email body
+                    param: to: param mail receiver
+                """
+        # Gets HTML from template
+        if context is None:
+            context = {}
+        html_message = render_to_string(template, context=context)
+        # Creates HTML Email
+        msg = EmailMultiAlternatives(subject, from_email=EMAIL_HOST_USER, to=[to])
+        # Send Email
+        msg.attach_alternative(html_message, "text/html")
+        EmailThread(msg).start()
+
+
+

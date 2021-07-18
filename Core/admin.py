@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin
+from django.contrib.admin import ModelAdmin, TabularInline
 
 from .models import Recruiter, Recruit, Transaction, Referral
-from .models.transaction import Commission
+from .models.transaction import Commission, CommissionPayment
 
 admin.site.register(Recruiter)
 admin.site.register(Recruit)
@@ -22,8 +22,14 @@ class TransactionAdmin(ModelAdmin):
 admin.site.register(Transaction, TransactionAdmin)
 
 
+class CommissionPaymentTabularInline(TabularInline):
+    model = CommissionPayment
+    max_num = 1
+
+
 class CommissionAdmin(ModelAdmin):
     list_display = ["recruit", "commission", "transaction", "time_stamp"]
+    inlines = [CommissionPaymentTabularInline]
 
 
 admin.site.register(Commission, CommissionAdmin)

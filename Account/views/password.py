@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Account.models import ForgetPassword
-from Account.send_email import SendEmail, get_forget_password_message
+from Core.send_email import SendEmail, get_forget_password_message
 from Account.serializers import PasswordChangeSerializer
 
 User = get_user_model()
