@@ -1,14 +1,11 @@
 import sys
-
 from django.urls import reverse
 from rest_framework.test import APITestCase
-import logging
 from Account.models import ForgetPassword
 from Account.tests.test_utils import get_unique_user_data
 from Core.models import Transaction
-from Core.const import TRANSACTION_PROFIT_RATE, TRANSACTION_PROFIT
+from Core.const import TRANSACTION_PROFIT
 from Core.models.transaction import Commission, CommissionPayment
-from ShoreCapitalReferral.env import TEST_EMAIL
 
 
 class IntegrationTest(APITestCase):
