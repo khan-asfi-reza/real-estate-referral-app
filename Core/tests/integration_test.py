@@ -29,7 +29,8 @@ class IntegrationTest(APITestCase):
         recruit_data = get_unique_user_data(2)
 
         # Set Recruiter Email
-        recruiter_data["email"] = TEST_EMAIL
+        if TEST_EMAIL:
+            recruiter_data["email"] = TEST_EMAIL
 
         # Part 1 - Create Recruit Data
         recruiter_create_url = reverse("recruiter-create")
