@@ -1,3 +1,0 @@
-WARNING:django.request:Bad Request: /api/auth/password/forget
-WARNING:django.request:Bad Request: /api/core/recruit/
-WARNING:django.request:Bad Request: /api/core/recruiter/create
