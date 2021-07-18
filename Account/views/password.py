@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Account.models import ForgetPassword
-from Account.send_email import SendEmail, get_forget_password_message
+from Core.send_email import SendEmail, get_forget_password_message
 from Account.serializers import PasswordChangeSerializer
 
 User = get_user_model()
@@ -43,43 +43,55 @@ class ChangePasswordApi(GenericAPIView):
 
 class ForgetPasswordApi(APIView):
     model = ForgetPassword
+    email_template = "forgot_password.html"
 
     # Post Method
     def post(self, request, *args, **kwargs):
         email = request.data.get("email", "")
         if email:
             try:
-                # Get User
+                # Get User Account Via Provided Email
                 user = User.objects.get(email=email)
-                forget_pass_obj, created = self.model.objects.get_or_create(user=user)
-                # If User sent request 5 times and
-                # 20 minutes since initiated time has not been passed the user will have to wait until 20 minutes
-                if forget_pass_obj.request_sent != forget_pass_obj.REQUEST_SENT_THRESHOLD:
-                    if forget_pass_obj.time_stamp + timezone.timedelta(minutes=20) > timezone.now():
-                        # Set Expiration Time
-                        forget_pass_obj.expiration_time = timezone.now() + datetime.timedelta(hours=1)
-                        # Sent Request Save
-                        if forget_pass_obj.request_sent == forget_pass_obj.REQUEST_SENT_THRESHOLD:
-                            forget_pass_obj.request_sent = 1
-                        else:
-                            forget_pass_obj.request_sent += 1
-                        # Reset Link
-                        forget_pass_obj.unique_link = get_random_string(30)
-                        # Save Object
-                        forget_pass_obj.save()
-                        SendEmail.send_email(
-                            subject="Shore Capital Agent Referral Password Reset",
-                            to=forget_pass_obj.user.email,
-                            body=get_forget_password_message(forget_pass_obj.unique_link)
-                        )
-                        email = forget_pass_obj.user.email
-                        secret_email = email[0:4] + "*" * (len(email.split('@')[0]) - 3) + f"@{email.split('@')[1]}"
+                # Initiate or Create a New Password Change Request
+                fp_obj, created = self.model.objects.get_or_create(user=user)
+                # Check if Client has sent request more than or equal REQUEST SENT THRESHOLD
+                has_threshold_passed = fp_obj.request_sent >= fp_obj.MAXIMUM_REQUEST_SENT_THRESHOLD
+                # Check if Forget Password Initialization has increased by MAXIMUM_REQUEST_SENT_WAIT_TIME
+                time_delta = timezone.timedelta(minutes=fp_obj.MAXIMUM_REQUEST_SENT_WAIT_TIME)
+                has_time_passed = timezone.now() > fp_obj.time_stamp + time_delta
+                # If Client has passed the maximum request sent threshold and initial time has increased by wait time
+                # Client can send else client can't send request
+                can_request_with_threshold = has_time_passed and has_threshold_passed
+                # If threshold has not passed or special logic
+                if not has_threshold_passed or can_request_with_threshold:
+                    # Set Expiration Time to initial time + 1 hour
+                    fp_obj.expiration_time = timezone.now() + datetime.timedelta(hours=1)
+                    # Sent Request Save
+                    if fp_obj.request_sent >= fp_obj.MAXIMUM_REQUEST_SENT_THRESHOLD:
+                        # Reset the request sent
+                        fp_obj.request_sent = 1
+                    else:
+                        fp_obj.request_sent += 1
+                    # Reset Link
+                    fp_obj.unique_link = get_random_string(30)
+                    # Save Object
+                    fp_obj.save()
+                    # Send Email
+                    SendEmail.send_html_email(
+                        template=self.email_template,
+                        subject="Shore Capital Agent Referral Password Reset",
+                        to=fp_obj.user.email,
+                        body=get_forget_password_message(fp_obj.unique_link)
+                    )
+                    # User Email as Secret
+                    email = fp_obj.user.email
+                    secret_email = email[0:4] + "*" * (len(email.split('@')[0]) - 3) + f"@{email.split('@')[1]}"
 
-                        return Response({
-                            "msg": 1,
-                            "text": f"An email has been sent to "
-                                    f"{secret_email}"
-                        }, status=status.HTTP_201_CREATED)
+                    return Response({
+                        "msg": 1,
+                        "text": f"An email has been sent to "
+                                f"{secret_email}"
+                    }, status=status.HTTP_201_CREATED)
 
                 return Response({
                     "msg": 0,
@@ -103,7 +115,7 @@ class ValidateResetLink(APIView):
             if fp_data.exists():
                 # Return Validation Code
                 if fp_data.first().expiration_time >= timezone.now():
-                    return Response({"msg": 1, "text": "Valid Code"})
+                    return Response({"msg": 1, "text": "Valid Code"}, status=status.HTTP_200_OK)
         # Return Error
         return Response({"msg": 0, "error": ["Invalid link"]}, status=status.HTTP_400_BAD_REQUEST)
 

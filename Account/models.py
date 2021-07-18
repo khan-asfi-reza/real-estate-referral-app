@@ -82,13 +82,16 @@ class AdminUser(User):
 
 # Forget Email
 class ForgetPassword(models.Model):
-    REQUEST_SENT_THRESHOLD = 6
+    # Maximum Request Send Limit within a wait time limit
+    MAXIMUM_REQUEST_SENT_THRESHOLD = 6
+    # Wait Time for Maximum Request Send Limit in Minute
+    MAXIMUM_REQUEST_SENT_WAIT_TIME = 20
     # User
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     # Unique Link
     unique_link = models.CharField(max_length=30, blank=True, null=True)
     # Creation Time
-    time_stamp = models.DateTimeField(auto_now_add=True)
+    time_stamp = models.DateTimeField(auto_now=True)
     # Expiration Time
     expiration_time = models.DateTimeField(default=get_expiration_time)
     # Changed

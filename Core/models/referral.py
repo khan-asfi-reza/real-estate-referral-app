@@ -26,4 +26,4 @@ class Referral(models.Model):
         unique_together = ["recruiter", "recruit"]
 
     def __str__(self):
-        return f"Recruiter:-{self.recruiter.first_name} {self.recruiter.last_name} | Recruit:-{self.recruit.first_name} {self.recruit.last_name}"
+        return f"{self.id} - {self.time_stamp}"
