@@ -166,7 +166,7 @@ if IS_PROD == 1:
             "file": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": "/var/log/django.log",
+                "filename": "/home/ubuntu/log/gunicorn/django.log",
                 "formatter": "app",
             },
         },
