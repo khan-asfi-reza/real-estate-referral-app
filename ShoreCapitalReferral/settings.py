@@ -61,7 +61,7 @@ ROOT_URLCONF = 'ShoreCapitalReferral.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,12 +140,11 @@ STATICFILES_DIRS = [
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR / 'static_root'
+STATIC_ROOT = BASE_DIR / 'static_root' if IS_PROD == 0 else "/var/www/"
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = f"/media/"
-
 
 CORS_ORIGIN_ALLOW_ALL = IS_PROD == 0
 
@@ -156,5 +155,3 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ORIGIN_WHITELIST = (
     WHITELIST_URL
 )
-
-
