@@ -119,6 +119,7 @@ REST_FRAMEWORK = {
     ]
 }
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -155,3 +156,4 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ORIGIN_WHITELIST = (
     WHITELIST_URL
 )
+
