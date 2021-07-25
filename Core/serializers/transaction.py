@@ -9,6 +9,6 @@ class CommissionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Commission
-        fields = ["id", "transaction", "commission", "recruit", "time_stamp"]
+        fields = ["id", "transaction", "commission", "recruit", "time_stamp", "completed"]
 
 

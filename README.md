@@ -351,7 +351,83 @@ Response Body
        time_stamp: "2020-02-02 12:19:34.45666",
        commission: 100,
        transaction: 1,
+       completed: true
     }
   ]
 }
 ```
+
+#### 11. Email Forget Reset Request
+
+`api/auth/password/forget`
+
+METHOD: `POST`
+
+POST BODY 
+```json5
+{
+  email: "email@example.com"
+}
+```
+Response
+```json5
+{
+  msg: 1,
+  text: "Response Text"
+}
+
+```
+msg - 0 - Fail
+
+msg - 1 - Success
+
+#### 12. Email Unique Link Validation
+
+`api/auth/password/forget/validate`
+
+METHOD: `POST`
+
+POST BODY 
+```json5
+{
+  unqiue_link: "PQRSTUVWX123"
+}
+```
+Response
+```json5
+{
+  msg: 1,
+  text: "Response Text"
+}
+
+```
+msg - 0 - Fail
+
+msg - 1 - Success
+
+
+#### 13. Email Unique Link Validation
+
+`api/auth/password/forget/reset`
+
+METHOD: `POST`
+
+POST BODY 
+```json5
+{
+  unqiue_link: "PQRSTUVWX123",
+  email: "EMAIL",
+  password: "PASSWORD"
+}
+```
+Response
+```json5
+{
+  msg: 1,
+  text: "Response Text"
+}
+
+```
+msg - 0 - Fail
+
+msg - 1 - Success
