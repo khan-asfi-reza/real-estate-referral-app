@@ -159,27 +159,31 @@ CORS_ORIGIN_WHITELIST = (
 
 if IS_PROD == 1:
     LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': True,
-        'formatters': {
-            'verbose': {
-                'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s'
-            }
-        },
-        'handlers': {
-            'gunicorn': {
-                'level': 'DEBUG',
-                'class': 'logging.handlers.RotatingFileHandler',
-                'formatter': 'verbose',
-                'filename': '/var/log/gunicorn.error.log',
-                'maxBytes': 1024 * 1024 * 100,  # 100 mb
-            }
-        },
-        'loggers': {
-            'gunicorn.errors': {
-                'level': 'DEBUG',
-                'handlers': ['gunicorn'],
-                'propagate': True,
+        "version": 1,
+        "disable_existing_loggers": False,
+        "root": {"level": "INFO", "handlers": ["file"]},
+        "handlers": {
+            "file": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "/var/log/django.log",
+                "formatter": "app",
             },
-        }
+        },
+        "loggers": {
+            "django": {
+                "handlers": ["file"],
+                "level": "INFO",
+                "propagate": True
+            },
+        },
+        "formatters": {
+            "app": {
+                "format": (
+                    u"%(asctime)s [%(levelname)-8s] "
+                    "(%(module)s.%(funcName)s) %(message)s"
+                ),
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            },
+        },
     }
