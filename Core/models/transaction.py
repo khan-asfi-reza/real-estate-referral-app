@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from Core.const import TRANSACTION_PROFIT
+
 User = get_user_model()
 
 
@@ -53,7 +55,7 @@ class CommissionPayment(models.Model):
     # Transaction ID
     transaction_id = models.PositiveBigIntegerField(blank=True)
     # Commission
-    commission = models.ForeignKey(to=Commission, on_delete=models.CASCADE)
+    commission = models.ForeignKey(to=Commission, on_delete=models.CASCADE, limit_choices_to={"completed": False})
     # Amount
     amount = models.FloatField(default=0.0)
     # When Was Create
@@ -62,17 +64,22 @@ class CommissionPayment(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def clean(self):
-        # If Commission Payment Passes the commission amount threshold
-        if self.commission.paid_commission + self.amount > self.commission.commission:
-            raise ValidationError({
-                'paid': 'Amount exceeded',
-                'commission': 'Cannot save commission'
-            })
+        # If Not Updated
+        if self.pk is None:
+            if self.commission.paid_commission + self.amount > self.commission.commission:
+                raise ValidationError({
+                    'amount': 'Amount exceeded',
+                    'commission': 'Cannot save commission'
+                })
 
-        self.transaction_id = self.commission.transaction.id
+            # If Commission Payment is Done, mark it as complete
+            if self.commission.paid_commission + self.amount == TRANSACTION_PROFIT:
+                self.commission.completed = True
+                self.commission.save()
 
     def save(self, *args, **kwargs):
         # If Transaction Id is invalid
         if not self.transaction_id:
             self.transaction_id = self.commission.transaction.id
         super(CommissionPayment, self).save(*args, **kwargs)
+

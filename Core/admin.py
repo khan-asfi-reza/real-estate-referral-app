@@ -24,7 +24,10 @@ admin.site.register(Transaction, TransactionAdmin)
 
 class CommissionPaymentTabularInline(TabularInline):
     model = CommissionPayment
-    max_num = 1
+    extra = 1
+
+    def has_add_permission(self, request, obj):
+        return not obj.completed
 
 
 class CommissionAdmin(ModelAdmin):
