@@ -22,17 +22,8 @@ class TransactionAdmin(ModelAdmin):
 admin.site.register(Transaction, TransactionAdmin)
 
 
-class CommissionPaymentTabularInline(TabularInline):
-    model = CommissionPayment
-    extra = 1
-
-    def has_add_permission(self, request, obj):
-        return not obj.completed
-
-
 class CommissionAdmin(ModelAdmin):
     list_display = ["recruit", "commission", "transaction", "time_stamp"]
-    inlines = [CommissionPaymentTabularInline]
 
 
 admin.site.register(Commission, CommissionAdmin)
