@@ -27,3 +27,10 @@ class CommissionAdmin(ModelAdmin):
 
 
 admin.site.register(Commission, CommissionAdmin)
+
+
+class CommissionPaymentAdmin(ModelAdmin):
+    list_display = ["recruiter", "id", "amount", "time_stamp"]
+
+
+admin.site.register(CommissionPayment, CommissionPaymentAdmin)
