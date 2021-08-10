@@ -1,6 +1,8 @@
+from cached_property import cached_property
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Sum
 
 from Core.const import TRANSACTION_PROFIT
 
@@ -43,8 +45,6 @@ class Commission(models.Model):
     updated = models.DateTimeField(auto_now=True)
     # Did The recruiter get the bonus
     completed = models.BooleanField(default=False)
-    # Paid Amount
-    paid_commission = models.FloatField(default=0.0, )
 
     def __str__(self):
         return f"{self.id} - {self.time_stamp} - {self.recruiter.id}"
@@ -52,10 +52,15 @@ class Commission(models.Model):
 
 # Paid Commission Amounts
 class CommissionPayment(models.Model):
-    # Transaction ID
-    transaction_id = models.PositiveBigIntegerField(blank=True)
+    recruiter = models.ForeignKey(to=User,
+                                  related_name="commission_payment_owner",
+                                  on_delete=models.SET_NULL,
+                                  null=True,
+                                  limit_choices_to={'role': 1})
     # Commission
-    commission = models.ForeignKey(to=Commission, on_delete=models.CASCADE, limit_choices_to={"completed": False})
+    commission = models.ManyToManyField(to=Commission,
+                                        limit_choices_to={"completed": False},
+                                        )
     # Amount
     amount = models.FloatField(default=0.0)
     # When Was Create
@@ -63,23 +68,22 @@ class CommissionPayment(models.Model):
     # Updated
     updated = models.DateTimeField(auto_now=True)
 
-    def clean(self):
-        # If Not Updated
-        if self.pk is None:
-            if self.commission.paid_commission + self.amount > self.commission.commission:
-                raise ValidationError({
-                    'amount': 'Amount exceeded',
-                    'commission': 'Cannot save commission'
-                })
+    @cached_property
+    def commission_amount_sum(self):
+        data = Commission.objects.filter(recruiter=self.recruiter).aggregate(Sum('commission'))
+        return data["commission__sum"]
 
-            # If Commission Payment is Done, mark it as complete
-            if self.commission.paid_commission + self.amount == TRANSACTION_PROFIT:
-                self.commission.completed = True
-                self.commission.save()
+    def clean(self):
+        if self.amount > self.commission_amount_sum:
+            raise ValidationError(
+                {
+                    "amount": "Max Threshold exceeded"
+                }
+            )
 
     def save(self, *args, **kwargs):
-        # If Transaction Id is invalid
-        if not self.transaction_id:
-            self.transaction_id = self.commission.transaction.id
-        super(CommissionPayment, self).save(*args, **kwargs)
 
+        if not self.amount:
+            self.amount = self.commission_amount_sum
+
+        super(CommissionPayment, self).save(*args, **kwargs)

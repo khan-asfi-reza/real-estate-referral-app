@@ -53,18 +53,14 @@ def transaction_post_save(sender, instance, created, *args, **kwargs):
 def commission_payment_post_save(sender, instance, created, *args, **kwargs):
     # If Object is created
     if created:
-        # Set Commission Paid Amount
-        instance.commission.paid_commission += instance.amount
-        # Save Commission
-        instance.commission.save()
         # Send Email Notification
+        instance.commission.all().update(completed=True)
         SendEmail.send_custom_context_html_email(template="commission_transaction.html",
                                                  subject="A Commission Transaction has been made",
                                                  context={
                                                      "trxid": instance.id,
-                                                     "transaction_id": instance.commission.transaction.id,
                                                      "amount": instance.amount,
                                                      "date": instance.time_stamp
                                                  },
-                                                 to=instance.commission.recruiter.email
+                                                 to=instance.recruiter.email
                                                  )

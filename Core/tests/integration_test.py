@@ -116,6 +116,10 @@ class IntegrationTest(APITestCase):
         sys.stdout.write("\n11. Password Reset Check - ✔")
 
         # Part 12 - Test Transaction Payment
-        cp = CommissionPayment.objects.create(commission=com, amount=50, )
-        self.assertEqual(com.paid_commission, cp.amount)
+        cp = CommissionPayment.objects.create(recruiter=com.recruiter, )
+        cp.commission.add(com)
+        cp.save()
+        self.assertEqual(com.commission, cp.amount)
         sys.stdout.write("\n12. Transaction Payment Check - ✔\n")
+
+        # Part 13
