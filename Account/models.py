@@ -1,10 +1,14 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USStateField
 
 from Account.utils import get_expiration_time
+from Core.const import LOGIN_LINK
+from Core.send_email import SendEmail
 
 
 class UserManager(BaseUserManager):
@@ -71,6 +75,22 @@ class User(AbstractUser):
     @property
     def full_name(self):
         return self.first_name + " " + self.last_name
+
+
+# User Post Save
+@receiver(post_save, sender=User, dispatch_uid="User Create Post Save")
+def user_post_create(sender, instance, created, *args, **kwargs):
+    # If Object is created
+    if created:
+        # Send Email Notification
+        SendEmail.send_custom_context_html_email(template="welcome.html",
+                                                 subject="Welcome To Shore Capital Agent Referral Program",
+                                                 context={
+                                                     "name": instance.first_name + " " + instance.last_name,
+                                                     "link": LOGIN_LINK
+                                                 },
+                                                 to=instance.email
+                                                 )
 
 
 class AdminUser(User):
