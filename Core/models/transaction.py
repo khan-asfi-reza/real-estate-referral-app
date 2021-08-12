@@ -1,10 +1,8 @@
-from cached_property import cached_property
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Sum
 
-from Core.const import TRANSACTION_PROFIT
 
 User = get_user_model()
 
@@ -47,7 +45,7 @@ class Commission(models.Model):
     completed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.id} - {self.time_stamp} - {self.recruiter.id}"
+        return f"{self.recruiter.email} - {self.id} - {self.time_stamp.strftime('%Y:%m:%d')}"
 
 
 # Paid Commission Amounts
@@ -60,6 +58,7 @@ class CommissionPayment(models.Model):
     # Commission
     commission = models.ManyToManyField(to=Commission,
                                         limit_choices_to={"completed": False},
+                                        blank=True
                                         )
     # Amount
     amount = models.FloatField(default=0.0)
@@ -68,22 +67,29 @@ class CommissionPayment(models.Model):
     # Updated
     updated = models.DateTimeField(auto_now=True)
 
-    @cached_property
-    def commission_amount_sum(self):
-        data = Commission.objects.filter(recruiter=self.recruiter).aggregate(Sum('commission'))
+    # Returns All Commission Objects
+    @property
+    def commission_object_query(self):
+        return Commission.objects.filter(recruiter=self.recruiter)
+
+    # Returns Total Commission Amount
+    @property
+    def commission_amount_total(self):
+        data = self.commission_object_query.aggregate(Sum('commission'))
         return data["commission__sum"]
 
+    def update_commission_complete(self):
+        self.commission.all().update(completed=True)
+
+    # Clean Method raise validation if amount is more than the summation of all commissions
     def clean(self):
-        if self.amount > self.commission_amount_sum:
+        if self.amount > self.commission_amount_total:
             raise ValidationError(
                 {
                     "amount": "Max Threshold exceeded"
                 }
             )
 
-    def save(self, *args, **kwargs):
-
-        if not self.amount:
-            self.amount = self.commission_amount_sum
-
-        super(CommissionPayment, self).save(*args, **kwargs)
+    class Meta:
+        verbose_name = "Commission Transaction"
+        verbose_name_plural = "Commission Transactions"

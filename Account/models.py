@@ -5,7 +5,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USStateField
-
 from Account.utils import get_expiration_time
 from Core.const import LOGIN_LINK
 from Core.send_email import SendEmail
@@ -33,13 +32,21 @@ class UserManager(BaseUserManager):
 
     # Create Admin Users
     def create_superuser(self, email, password, role, *args, **kwargs):
-        return self.__create_user(email, password, role, *args, **kwargs,
+        return self.__create_user(email,
+                                  password,
+                                  role=3,
+                                  *args,
+                                  **kwargs,
                                   is_staff=True,
                                   is_active=True,
                                   is_superuser=True, )
 
     def create_staff(self, email, password, role, *args, **kwargs):
-        return self.__create_user(email, password, role, *args, **kwargs,
+        return self.__create_user(email,
+                                  password,
+                                  role=3,
+                                  *args,
+                                  **kwargs,
                                   is_staff=True,
                                   is_active=True,
                                   is_superuser=False, )

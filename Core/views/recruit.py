@@ -41,7 +41,7 @@ class RecruitUserCreateListApi(UserNestedCreateApi, ListAPIView):
     model = Recruit
     serializer_class = RecruitSerializer
     ref_code_kwargs = "ref_code"
-    queryset = Recruit.objects.get_queryset()
+    queryset = Recruit.objects.select_related("user").all()
     role = 2
 
     def get_recruiter(self, request):

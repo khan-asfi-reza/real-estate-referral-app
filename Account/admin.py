@@ -22,7 +22,18 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('email',
+                       "phone_number",
+                       "role",
+                       "first_name",
+                       "last_name",
+                       'password1',
+                       'password2',
+                       "city",
+                       "zip",
+                       "state",
+                       "address"
+                       )}
          ),
     )
 
@@ -48,6 +59,26 @@ class Admin(UserAdmin):
         ('Permissions', {'fields': ('is_superuser', 'is_staff', 'groups', 'user_permissions')}),
         ('Time Stamps', {'fields': ("date_joined", "last_login",)}),
 
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email',
+                       "phone_number",
+                       "role",
+                       "first_name",
+                       "last_name",
+                       'role',
+                       'password1',
+                       'password2',
+                       'is_superuser',
+                       'is_staff',
+                       'groups',
+                       'user_permissions'
+
+                       )}
+         ),
     )
 
     def get_queryset(self, request):

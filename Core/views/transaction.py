@@ -37,4 +37,4 @@ class CommissionListApi(ListAPIView):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        return Commission.objects.filter(recruiter=self.request.user).order_by("id")
+        return Commission.objects.select_related("recruit").filter(recruiter=self.request.user).order_by("id")
