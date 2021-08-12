@@ -51,7 +51,7 @@ class Commission(models.Model):
 # Paid Commission Amounts
 class CommissionTransaction(models.Model):
     recruiter = models.ForeignKey(to=User,
-                                  related_name="commission_owner",
+                                  related_name="commission_transaction_owner",
                                   on_delete=models.SET_NULL,
                                   null=True,
                                   limit_choices_to={'role': 1})
