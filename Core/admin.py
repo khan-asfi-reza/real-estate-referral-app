@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline
 
 from .models import Recruiter, Recruit, Transaction, Referral
-from .models.transaction import Commission, CommissionPayment
+from .models.transaction import Commission, CommissionTransaction
 
 admin.site.register(Recruiter)
 admin.site.register(Recruit)
@@ -33,4 +33,4 @@ class CommissionPaymentAdmin(ModelAdmin):
     list_display = ["recruiter", "id", "amount", "time_stamp"]
 
 
-admin.site.register(CommissionPayment, CommissionPaymentAdmin)
+admin.site.register(CommissionTransaction, CommissionPaymentAdmin)

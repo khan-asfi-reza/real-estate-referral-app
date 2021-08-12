@@ -5,7 +5,7 @@ from Account.models import ForgetPassword
 from Account.tests.test_utils import get_unique_user_data
 from Core.models import Transaction
 from Core.const import TRANSACTION_PROFIT
-from Core.models.transaction import Commission, CommissionPayment
+from Core.models.transaction import Commission, CommissionTransaction
 
 
 class IntegrationTest(APITestCase):
@@ -116,7 +116,7 @@ class IntegrationTest(APITestCase):
         sys.stdout.write("\n11. Password Reset Check - ✔")
 
         # Part 12 - Test Transaction Payment
-        cp = CommissionPayment.objects.create(recruiter=com.recruiter, )
+        cp = CommissionTransaction.objects.create(recruiter=com.recruiter, )
         cp.commission.add(com)
         cp.save()
         self.assertEqual(com.commission, cp.amount)
