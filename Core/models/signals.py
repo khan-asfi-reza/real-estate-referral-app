@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from Core.const import TRANSACTION_PROFIT_BASE_AMOUNT, TRANSACTION_PROFIT
-from Core.models.transaction import Transaction, Commission, CommissionPayment
+from Core.models.transaction import Transaction, Commission, CommissionTransaction
 from Core.models.referral import Referral
 from Core.models.recruiter import Recruiter
 from Core.send_email import SendEmail
@@ -47,8 +47,8 @@ def transaction_post_save(sender: django.db.models.Model, instance: Transaction,
 
 
 # Commission Payment Post Save
-@receiver(post_save, sender=CommissionPayment, dispatch_uid="Commission Payment Post Save")
-def commission_payment_post_save(sender: django.db.models.Model, instance: CommissionPayment, created, *args, **kwargs):
+@receiver(post_save, sender=CommissionTransaction, dispatch_uid="Commission Payment Post Save")
+def commission_payment_post_save(sender: django.db.models.Model, instance: CommissionTransaction, created, *args, **kwargs):
     # If Object is created
     if created:
         # Send Email Notification
