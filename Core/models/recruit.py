@@ -19,8 +19,8 @@ class Recruit(models.Model):
     association = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
 
     @property
     def username(self):
-        return self.user.username
+        return self.user.email

@@ -72,6 +72,13 @@ those Recruits will complete a transaction and based on that transaction, the re
 4. `time_stamp`: Date Time
 5. `Transaction`: Transaction ID
 
+### Commission Payment
+
+1. `Recruit`: User Model Instance
+2. `commission`: Commission Model Instance []
+3. `amount`: Float
+4. `time_stamp`: Date Time
+
 
 Transaction Creation Adds A New Commission 
 
@@ -431,3 +438,27 @@ Response
 msg - 0 - Fail
 
 msg - 1 - Success
+
+
+## UTILS
+
+`SendEmail`
+
+Import Path: `Core.send_email.SendEmail`
+
+```python
+from Core.send_email import SendEmail
+
+SendEmail.send_email(
+    subject="MAIL SUBJECT",
+    body="Mail Body",
+    to="MAIL SEND TO",
+)
+
+SendEmail.send_custom_context_html_email(
+    template="TEMPLATE NAME",
+    subject="MAIL SUBJECT",
+    context="CONTEXT TEXT",
+    to="EMAIL SEND TO"
+)
+```

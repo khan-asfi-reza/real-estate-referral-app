@@ -29,7 +29,7 @@ class RecruiterCRUDApi(GenericAPIView):
     authentication_classes = [TokenAuthentication]
     model = Recruiter
     serializer_class = RecruiterRefCodeSerializer
-    queryset = Recruiter.objects.get_queryset()
+    queryset = Recruiter.objects.select_related("user").all()
 
     def get(self, request):
         # Recruiter Model
@@ -74,8 +74,7 @@ class RecruiterInfographicApi(APIView):
         # Total Recruited
         recruited = ref_data.count()
         # Total Bonus
-        commission = Commission.objects.filter(recruiter=self.request.user)
-        bonus = commission.aggregate(Sum("commission"))["commission__sum"]
+        bonus = Commission.objects.filter(recruiter=self.request.user).aggregate(Sum("commission"))["commission__sum"]
         bonus = 0 if bonus is None else bonus
 
         return Response({
