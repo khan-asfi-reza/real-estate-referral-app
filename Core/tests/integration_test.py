@@ -117,7 +117,6 @@ class IntegrationTest(APITestCase):
 
         # Part 12 - Test Transaction Payment
         cp = CommissionTransaction.objects.create(recruiter=com.recruiter, )
-        cp.commission.add(com)
         cp.save()
         self.assertEqual(com.commission, cp.amount)
         sys.stdout.write("\n12. Transaction Payment Check - ✔\n")

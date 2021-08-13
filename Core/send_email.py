@@ -1,8 +1,13 @@
+from smtplib import SMTPAuthenticationError, SMTPConnectError, SMTPSenderRefused
+
 from django.core.mail import EmailMessage
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from ShoreCapitalReferral.settings import WHITELIST_URL, FEND_FP_URL, EMAIL_HOST_USER
+import logging
+
+Logger = logging.getLogger(__name__)
 
 
 def get_forget_password_message(unique_link):
@@ -17,7 +22,10 @@ class EmailThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        self.email.send()
+        try:
+            self.email.send()
+        except SMTPAuthenticationError or SMTPConnectError or SMTPSenderRefused:
+            Logger.error("Error Sending Email")
 
 
 class SendEmail:
@@ -69,6 +77,3 @@ class SendEmail:
         # Send Email
         msg.attach_alternative(html_message, "text/html")
         EmailThread(msg).start()
-
-
-

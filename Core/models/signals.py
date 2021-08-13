@@ -54,8 +54,6 @@ def commission_payment_post_save(sender: django.db.models.Model, instance: Commi
         # Send Email Notification
         # Set To CommissionPayment
         instance.amount = instance.commission_amount_total if not instance.amount else instance.amount
-        # If instance commission object list is empty
-        instance.commission.add(*instance.commission_object_query)
         # Update Commission Intents To Complete
         instance.update_commission_complete()
         # Save Instance

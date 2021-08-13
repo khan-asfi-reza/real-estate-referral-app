@@ -33,4 +33,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-TEST_EMAIL = os.environ.get("TEST_EMAIL", "integreationtestemail18822@test_email.com")
+TEST_EMAIL = os.environ.get("TEST_EMAIL", "agentreferral@shorecapital.net")
