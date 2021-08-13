@@ -58,6 +58,8 @@ def commission_payment_post_save(sender: django.db.models.Model, instance: Commi
         instance.commission.add(*instance.commission_object_query)
         # Update Commission Intents To Complete
         instance.update_commission_complete()
+        # Save Instance
+        instance.save()
         # Send Email
         SendEmail.send_custom_context_html_email(template="commission_transaction.html",
                                                  subject="A Commission Transaction has been made",
