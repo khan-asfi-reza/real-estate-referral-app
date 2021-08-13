@@ -54,7 +54,8 @@ class CommissionTransaction(models.Model):
                                   related_name="commission_transaction_owner",
                                   on_delete=models.SET_NULL,
                                   null=True,
-                                  limit_choices_to={'role': 1})
+                                  limit_choices_to={'role': 1},
+                                  )
     # Commission
     commission = models.ManyToManyField(to=Commission,
                                         limit_choices_to={"completed": False},
@@ -90,6 +91,11 @@ class CommissionTransaction(models.Model):
                     "amount": "Max Threshold exceeded"
                 }
             )
+
+        if self.recruiter is None:
+            raise ValidationError({
+                "recruiter": "Recruiter cannot be empty"
+            })
 
     class Meta:
         verbose_name = "Commission Transaction"
