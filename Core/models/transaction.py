@@ -70,7 +70,7 @@ class CommissionTransaction(models.Model):
     # Returns All Commission Objects
     @property
     def commission_object_query(self):
-        return Commission.objects.filter(recruiter=self.recruiter)
+        return Commission.objects.filter(recruiter=self.recruiter, completed=False)
 
     # Returns Total Commission Amount
     @property
@@ -78,6 +78,7 @@ class CommissionTransaction(models.Model):
         data = self.commission_object_query.aggregate(Sum('commission'))
         return data["commission__sum"]
 
+    # Update all incomplete commissions
     def update_commission_complete(self):
         self.commission.all().update(completed=True)
 
