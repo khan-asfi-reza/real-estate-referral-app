@@ -26,7 +26,7 @@ class CommissionAdmin(ModelAdmin):
     list_display = ["recruit", "commission", "transaction", 'completed', "time_stamp"]
 
     def get_readonly_fields(self, request, obj: Commission = None):
-        if not obj.completed and not obj.commission_transaction:
+        if obj and not obj.completed and not obj.commission_transaction:
             return []
         else:
             return ['completed', 'commission_transaction']

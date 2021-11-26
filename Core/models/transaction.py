@@ -15,6 +15,8 @@ class Transaction(models.Model):
     recruit = models.ForeignKey(to=User, on_delete=models.CASCADE, limit_choices_to={'role': 2})
     # Amount Completed
     amount = models.FloatField()
+    # Is Eligible For Commission
+    is_eligible = models.BooleanField(default=True)
     # Time when completed
     time_stamp = models.DateTimeField(auto_now_add=True)
 
@@ -83,6 +85,8 @@ class CommissionTransaction(models.Model):
                     "amount": "Max Threshold exceeded"
                 }
             )
+
+        self.amount = self.commission_amount_total
 
     def __str__(self):
         return f"{self.recruiter} - {self.time_stamp.strftime('%Y-%m-%d')} - {self.id}"

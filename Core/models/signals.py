@@ -24,7 +24,7 @@ def recruiter_post_create(sender: django.db.models.Model, instance: Recruiter, c
 @receiver(post_save, sender=Transaction, dispatch_uid="Transaction Post Save Commission Creation")
 def transaction_post_save(sender: django.db.models.Model, instance: Transaction, created: bool, *args: tuple, **kwargs: dict):
     # If the object is created
-    if created:
+    if created and instance.is_eligible:
         # Check if amount is more than permissible amount
         if instance.amount >= TRANSACTION_PROFIT_BASE_AMOUNT:
             try:
