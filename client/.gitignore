@@ -1,0 +1,6 @@
+/node_modules/
+/referral_static/build/
+
+.DS_Store
+design
+.idea
