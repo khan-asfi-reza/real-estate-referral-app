@@ -1,3 +1,10 @@
+client/node_modules/
+client/public/referral_static/build
+
+.DS_Store
+design
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 /__pycache__/
@@ -9,7 +16,7 @@ agentreferral.pem
 *.so
 venv
 #remove collectstatic folder
-shorecap/static/*
+
 .idea
 # Distribution / packaging
 .Python
