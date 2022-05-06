@@ -1,0 +1,4 @@
+TRANSACTION_PROFIT_BASE_AMOUNT = 500
+TRANSACTION_PROFIT_RATE = 0.5
+TRANSACTION_PROFIT = 100.0
+LOGIN_LINK = "https://agent.shorecapital.net/referral/login"
