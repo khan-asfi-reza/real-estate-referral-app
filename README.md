@@ -1,8 +1,6 @@
-# Shore Capital Agent Referral Backend
-[![Shore Capital Backend](https://github.com/alujan45/Shore-Capital-Agent-Referral/workflows/Development/badge.svg)](https://github.com/alujan45/Shore-Capital-Agent-Referral/actions)
-[![Shore Capital Backend](https://github.com/alujan45/Shore-Capital-Agent-Referral/workflows/Production/badge.svg)](https://github.com/alujan45/Shore-Capital-Agent-Referral/actions)
+#  Reza Corporation Agent Referral Backend
 
-Shore Capital Agent Referral Backend, Basic referral system backend.
+ Reza Corporation Agent Referral Backend, Basic referral system backend.
 
 Recruiters will create account and use their unique referral link to recruit other users, 
 those Recruits will complete a transaction and based on that transaction, the recruiter will get commission
@@ -447,7 +445,7 @@ msg - 1 - Success
 Import Path: `Core.send_email.SendEmail`
 
 ```python
-from Core.send_email import SendEmail
+from server.apps.Core import SendEmail
 
 SendEmail.send_email(
     subject="MAIL SUBJECT",
