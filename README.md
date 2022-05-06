@@ -1,6 +1,37 @@
-#  Reza Corporation Agent Referral Backend
+#  Agent Referral Backend
 
- Reza Corporation Agent Referral Backend, Basic referral system backend.
+![](https://github.com/khan-asfi-reza/real-estate-referral-app/workflows/Development/badge.svg)
+![](https://github.com/khan-asfi-reza/real-estate-referral-app/workflows/Production/badge.svg)
+### This project is being used in production by a different company
+
+## Client Side 👩‍💻
+
+### Frameworks
+1. Svelte
+2. Bootstrap
+3. AOS
+
+### How to run
+
+1. Change directory to the client
+```shell
+cd client
+```
+
+2. Install packages
+```shell
+npm i 
+```
+
+3. Run Server
+```shell
+npm run dev
+```
+
+
+## Server Side 🖥️
+
+Reza Corporation Agent Referral Backend, Basic referral system backend.
 
 Recruiters will create account and use their unique referral link to recruit other users, 
 those Recruits will complete a transaction and based on that transaction, the recruiter will get commission
@@ -79,6 +110,29 @@ those Recruits will complete a transaction and based on that transaction, the re
 
 
 Transaction Creation Adds A New Commission 
+
+## Installation
+
+1. Clone the repo
+```shell
+git clone https://github.com/khan-asfi-reza/real-estate-referral-app
+```
+
+2. Install packages
+```shell
+pip install -r requirements.txt
+```
+
+3. Test 
+```shell
+python manage.py test
+```
+
+4. Run
+```shell
+python manage.py runserver
+```
+
 
 ## API Docs
 
